@@ -25,6 +25,7 @@ function onSearch(event) {
   event.preventDefault();
 
   refs.galleryContainer.innerHTML = '';
+  refs.loadMoreBtn.classList.add('is-hidden'); // Приховуємо кнопку
   newsApiService.query =
     event.currentTarget.elements.searchQuery.value.trim();
   newsApiService.resetPage();
@@ -38,34 +39,31 @@ function onSearch(event) {
   fetchGallery();
 }
 
-function onLoadMore() {
+async function onLoadMore() {
+  refs.loadMoreBtn.classList.add('is-hidden'); // Приховуємо кнопку
   newsApiService.incrementPage();
   fetchGallery();
 }
 
 async function fetchGallery() {
-  refs.loadMoreBtn.classList.add('is-hidden');
-
   const result = await newsApiService.fetchGallery();
-  const { hits, total } = result; // Деструктурируем переменную hits из результата
+  const { hits, total } = result;
   isShown += hits.length;
 
   if (!hits.length) {
     Notify.failure(
       `Sorry, there are no images matching your search query. Please try again.`
     );
-    refs.loadMoreBtn.classList.add('is-hidden');
     return;
   }
 
-  onRenderGallery(hits); // Передаем переменную hits в функцию onRenderGallery
+  onRenderGallery(hits);
 
-  if (isShown < total) {
-    Notify.success(`Hooray! We found ${total} images !!!`);
-    refs.loadMoreBtn.classList.remove('is-hidden');
-  }
-
-  if (isShown >= total) {
+  const totalPages = newsApiService.calculateTotalPages();
+  
+  if (newsApiService.page < totalPages) {
+    refs.loadMoreBtn.classList.remove('is-hidden'); // Показуємо кнопку
+  } else {
     Notify.info("We're sorry, but you've reached the end of search results.");
   }
 }

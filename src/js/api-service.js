@@ -5,7 +5,9 @@ export default class NewsApiService {
     this.searchQuery = '';
     this.page = 1;
     this.PER_PAGE = 40;
+    this.totalHits = 0;
   }
+
   async fetchGallery() {
     const axiosOptions = {
       method: 'get',
@@ -22,14 +24,18 @@ export default class NewsApiService {
     };
     try {
       const response = await axios(axiosOptions);
-
       const data = response.data;
 
+      this.totalHits = data.totalHits;
       this.incrementPage();
       return data;
     } catch (error) {
       console.error(error);
     }
+  }
+
+  calculateTotalPages() {
+    return Math.ceil(this.totalHits / this.PER_PAGE);
   }
 
   incrementPage() {
@@ -50,5 +56,6 @@ export default class NewsApiService {
 
   set query(newQuery) {
     this.searchQuery = newQuery;
+    this.resetPage();
   }
 }
