@@ -35,7 +35,7 @@ export default class NewsApiService {
   }
 
   calculateTotalPages() {
-    return Math.ceil(this.totalHits / this.PER_PAGE);
+    return Math.ceil(this.totalHits / this.per_page);
   }
 
   incrementPage() {
