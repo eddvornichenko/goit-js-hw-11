@@ -57,10 +57,13 @@ async function fetchGallery() {
 
   const totalPages = newsApiService.calculateTotalPages();
   
-  if (newsApiService.page < totalPages) {
-    refs.loadMoreBtn.classList.remove('is-hidden');
+  if (newsApiService.page >= totalPages) {
+    refs.loadMoreBtn.classList.add('is-hidden');
+    if (totalPages > 0) {
+      Notify.info(`Found ${total} images in total.`);
+    }
   } else {
-    Notify.info(`Found ${total} images in total.`);
+    refs.loadMoreBtn.classList.remove('is-hidden');
   }
 }
 
