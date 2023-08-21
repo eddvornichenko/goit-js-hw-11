@@ -14,12 +14,6 @@ const newsApiService = new NewsApiService();
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
-const options = {
-  rootMargin: '50px',
-  root: null,
-  threshold: 0.3,
-};
-
 function onSearch(event) {
   event.preventDefault();
 
@@ -56,9 +50,9 @@ async function fetchGallery() {
   onRenderGallery(hits);
 
   const totalPages = newsApiService.calculateTotalPages();
-  
+
   if (newsApiService.page >= totalPages) {
-    refs.loadMoreBtn.classList.add('is-hidden');
+    refs.loadMoreBtn.classList.add('is-hidden'); // Скрываем кнопку после последней страницы
     if (totalPages > 0) {
       Notify.info(`Found ${total} images in total.`);
     }
