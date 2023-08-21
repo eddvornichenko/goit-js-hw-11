@@ -51,8 +51,8 @@ async function fetchGallery() {
 
   const totalPages = newsApiService.calculateTotalPages();
 
-  if (newsApiService.page >= totalPages) {
-    refs.loadMoreBtn.classList.add('is-hidden'); // Скрываем кнопку после последней страницы
+  if (isShown >= total) {
+    refs.loadMoreBtn.classList.add('is-hidden'); // Скрываем кнопку после загрузки всех изображений
     if (totalPages > 0) {
       Notify.info(`Found ${total} images in total.`);
     }
