@@ -14,12 +14,20 @@ const newsApiService = new NewsApiService();
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
+const options = {
+  rootMargin: '50px',
+  root: null,
+  threshold: 0.3,
+};
+const observer = new IntersectionObserver(onLoadMore, options);
+
 function onSearch(event) {
   event.preventDefault();
 
   refs.galleryContainer.innerHTML = '';
-  refs.loadMoreBtn.classList.add('is-hidden');
-  newsApiService.query = event.currentTarget.elements.searchQuery.value.trim();
+  refs.loadMoreBtn.classList.add('is-hidden'); // Приховуємо кнопку
+  newsApiService.query =
+    event.currentTarget.elements.searchQuery.value.trim();
   newsApiService.resetPage();
 
   if (newsApiService.query === '') {
@@ -32,6 +40,8 @@ function onSearch(event) {
 }
 
 async function onLoadMore() {
+  refs.loadMoreBtn.classList.add('is-hidden'); // Приховуємо кнопку
+  newsApiService.incrementPage();
   fetchGallery();
 }
 
@@ -50,16 +60,14 @@ async function fetchGallery() {
   onRenderGallery(hits);
 
   const totalPages = newsApiService.calculateTotalPages();
-
-  if (isShown >= total) {
-    refs.loadMoreBtn.classList.add('is-hidden'); // Скрываем кнопку после загрузки всех изображений
-    if (totalPages > 0) {
-      Notify.info(`Found ${total} images in total.`);
-    }
+  
+  if (newsApiService.page < totalPages) {
+    refs.loadMoreBtn.classList.remove('is-hidden'); // Показуємо кнопку
   } else {
-    refs.loadMoreBtn.classList.remove('is-hidden');
+    Notify.info(`Found ${total} images in total.`);
   }
 }
+
 
 function onRenderGallery(elements) {
   const markup = elements
