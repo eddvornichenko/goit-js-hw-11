@@ -12,19 +12,19 @@ let isShown = 0;
 const newsApiService = new NewsApiService();
 
 refs.searchForm.addEventListener('submit', onSearch);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 const options = {
   rootMargin: '50px',
   root: null,
   threshold: 0.3,
 };
-const loadMoreObserver = new IntersectionObserver(onLoadMore, options);
-loadMoreObserver.observe(refs.loadMoreBtn);
 
 function onSearch(event) {
   event.preventDefault();
 
   refs.galleryContainer.innerHTML = '';
+  refs.loadMoreBtn.classList.add('is-hidden');
   newsApiService.query = event.currentTarget.elements.searchQuery.value.trim();
   newsApiService.resetPage();
 
@@ -37,10 +37,8 @@ function onSearch(event) {
   fetchGallery();
 }
 
-async function onLoadMore(entries, observer) {
-  if (entries[0].isIntersecting) {
-    fetchGallery();
-  }
+async function onLoadMore() {
+  fetchGallery();
 }
 
 async function fetchGallery() {
