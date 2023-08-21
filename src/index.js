@@ -25,9 +25,8 @@ function onSearch(event) {
   event.preventDefault();
 
   refs.galleryContainer.innerHTML = '';
-  refs.loadMoreBtn.classList.add('is-hidden'); // Приховуємо кнопку
-  newsApiService.query =
-    event.currentTarget.elements.searchQuery.value.trim();
+  refs.loadMoreBtn.classList.add('is-hidden');
+  newsApiService.query = event.currentTarget.elements.searchQuery.value.trim();
   newsApiService.resetPage();
 
   if (newsApiService.query === '') {
@@ -40,8 +39,6 @@ function onSearch(event) {
 }
 
 async function onLoadMore() {
-  refs.loadMoreBtn.classList.add('is-hidden'); // Приховуємо кнопку
-  newsApiService.incrementPage();
   fetchGallery();
 }
 
@@ -62,12 +59,11 @@ async function fetchGallery() {
   const totalPages = newsApiService.calculateTotalPages();
   
   if (newsApiService.page < totalPages) {
-    refs.loadMoreBtn.classList.remove('is-hidden'); // Показуємо кнопку
+    refs.loadMoreBtn.classList.remove('is-hidden');
   } else {
     Notify.info(`Found ${total} images in total.`);
   }
 }
-
 
 function onRenderGallery(elements) {
   const markup = elements
