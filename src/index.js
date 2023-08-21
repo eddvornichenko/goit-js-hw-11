@@ -64,9 +64,10 @@ async function fetchGallery() {
   if (newsApiService.page < totalPages) {
     refs.loadMoreBtn.classList.remove('is-hidden'); // Показуємо кнопку
   } else {
-    Notify.info("We're sorry, but you've reached the end of search results.");
+    Notify.info(`Found ${total} images in total.`);
   }
 }
+
 
 function onRenderGallery(elements) {
   const markup = elements
