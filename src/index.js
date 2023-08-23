@@ -108,13 +108,13 @@ function onloadMore() {
       simpleLightBox = new SimpleLightbox('.gallery a').refresh();
 
       const totalPages = Math.ceil(data.totalHits / perPage);
-
-      if (page > totalPages) {
+      if (page >= totalPages) {
         btnLoadMore.classList.add('is-hidden');
         Notify.failure(
           "We're sorry, but you've reached the end of search results."
-        );
-      }
-    })
-    .catch(error => console.log(error));
-}
+          );
+        }
+        
+      })
+      .catch(error => console.log(error));
+    }
